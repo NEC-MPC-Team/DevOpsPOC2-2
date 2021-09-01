@@ -1,0 +1,51 @@
+variables:
+  terraformWorkingDirectory: $(System.DefaultWorkingDirectory)/src
+resources:
+  repositories:
+    - repository: self
+      type: git
+      ref: main
+jobs:
+  - job: Job_1
+    displayName: Agent job 1
+    pool:
+      vmImage: vs2017-win2016
+    steps:
+      - checkout: self
+        clean: true
+      - task: TerraformInstaller@0
+        displayName: Install Terraform 1.0.3
+        inputs:
+          terraformVersion: 1.0.3
+      - task: TerraformTaskV2@2
+        inputs:
+          provider: azurerm
+          command: init
+          backendServiceArm: DevOpsPOCRG2Connection
+          backendAzureRmResourceGroupName: DevOpsPOC2RG
+          backendAzureRmStorageAccountName: devopspoc2storage1
+          backendAzureRmContainerName: tfstateblobpoc2
+          backendAzureRmKey: terraform.tfstate
+  - job: "runCheckov"
+    displayName: "Checkov > Pull, run and publish results of Checkov scan"
+    steps:
+          - bash: |
+                            docker pull bridgecrew/checkov
+            workingDirectory: $(System.DefaultWorkingDirectory)
+            displayName: "Pull > bridgecrew/checkov"
+          - bash: |
+              docker run \
+                --volume $(pwd):/tf bridgecrew/checkov \
+                --directory /tf \
+                --output junitxml \
+                --soft-fail > $(pwd)/CheckovReport.xml              
+            workingDirectory: $(System.DefaultWorkingDirectory)
+            displayName: "Run > checkov"
+          - task: PublishTestResults@2
+            inputs:
+              testRunTitle: "Checkov Results"
+              failTaskOnFailedTests: true
+              testResultsFormat: "JUnit"
+              testResultsFiles: "CheckovReport.xml"
+              searchFolder: "$(System.DefaultWorkingDirectory)"
+            displayName: "Publish > Checkov scan results"
