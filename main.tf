@@ -57,7 +57,7 @@ resource "azurerm_network_security_group" "nsg" {
 
   security_rule {
 	 source_port_range           = "any"
-     destination_port_range      = ["22"]
+     destination_port_range      = "22"
      source_address_prefix       = "82.102.23.23"
      destination_address_prefix  = "*"
   }
