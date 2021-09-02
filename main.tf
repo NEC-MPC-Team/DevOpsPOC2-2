@@ -137,4 +137,4 @@ resource "azurerm_linux_virtual_machine" "vm2" {
     sku       = "18.04-LTS"
     version   = "latest"
   }
-}
+}}
