@@ -26,6 +26,14 @@ jobs:
           backendAzureRmStorageAccountName: devopspoc2storage1
           backendAzureRmContainerName: tfstateblobpoc2
           backendAzureRmKey: terraform.tfstate
+        name: TerraformInit
+        displayName: Terraform init
+      - task: TerraformTaskV2@2
+        inputs:
+          provider: azurerm
+          command: validate
+        name: TerrraformValidate
+        displayName: Terraform Validate
   - job: "runCheckov"
     displayName: "Checkov > Pull, run and publish results of Checkov scan"
     steps:
