@@ -43,7 +43,7 @@ jobs:
             displayName: "Pull > bridgecrew/checkov"
           - bash: |
               docker run \
-                --volume $(pwd):/tf bridgecrew/checkov --external-checks-git https://github.com/ayildirimnec/CheckovPolicyStore.git
+                --volume $(pwd):/tf bridgecrew/checkov --external-checks-git https://github.com/ayildirimnec/CheckovPolicyStore.git \
                 --directory /tf \
                 --output junitxml \
                 --soft-fail > $(pwd)/CheckovReport.xml              
