@@ -6,6 +6,7 @@ variable "location" {
   description = "The Azure Region in which all resources in this example should be created."
 }
 
-variable "ip-forwarding"{
+variable "ip_forwarding" {
   type = bool
+  default = true
 }
