@@ -34,6 +34,11 @@ jobs:
           command: validate
         name: TerrraformValidate
         displayName: Terraform Validate
+  - job: RunTfLint
+    displayName: Tflint
+    steps:
+      - bash: >
+          docker run --rm -v $(System.DefaultWorkingDirectory) -t ghcr.io/terraform-linters/tflint-bundle
   - job: "runCheckov"
     displayName: "Checkov > Pull, run and publish results of Checkov scan"
     steps:
