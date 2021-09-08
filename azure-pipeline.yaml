@@ -1,5 +1,5 @@
 variables:
-  terraformWorkingDirectory: $(System.DefaultWorkingDirectory)/src
+  terraformWorkingDirectory: $(System.DefaultWorkingDirectory)
 resources:
   repositories:
     - repository: self
