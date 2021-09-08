@@ -4,7 +4,7 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "main" {
   name     = "${var.prefix}-resources"
-  location = var.location
+  location = "aus-east"
 }
 
 resource "azurerm_virtual_network" "main" {
@@ -25,7 +25,7 @@ resource "azurerm_network_interface" "main" {
   name                 = "${var.prefix}-nic"
   resource_group_name  = azurerm_resource_group.main.name
   location             = azurerm_resource_group.main.location
-  enable_ip_forwarding = true
+  enable_ip_forwarding = false
 
   ip_configuration {
     name                          = "internal"
