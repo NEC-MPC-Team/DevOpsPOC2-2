@@ -4,7 +4,7 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "main" {
   name     = "${var.prefix}-resources"
-  location = var.location
+  location = "aus-east"
 }
 
 resource "azurerm_virtual_network" "main" {
@@ -22,9 +22,10 @@ resource "azurerm_subnet" "internal" {
 }
 
 resource "azurerm_network_interface" "main" {
-  name                = "${var.prefix}-nic"
-  resource_group_name = azurerm_resource_group.main.name
-  location            = azurerm_resource_group.main.location
+  name                 = "${var.prefix}-nic"
+  resource_group_name  = azurerm_resource_group.main.name
+  location             = azurerm_resource_group.main.location
+  enable_ip_forwarding = true
 
   ip_configuration {
     name                          = "internal"
@@ -34,13 +35,13 @@ resource "azurerm_network_interface" "main" {
 }
 
 resource "azurerm_windows_virtual_machine" "main" {
-  name                            = "${var.prefix}-vm"
-  resource_group_name             = azurerm_resource_group.main.name
-  location                        = azurerm_resource_group.main.location
-  size                            = "Standard_F2"
-  admin_username                  = "adminuser"
-  admin_password                  = "P@ssw0rd1234!"
-  custom_data                     = base64encode("Hello World!")
+  name                = "${var.prefix}-vm"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+  size                = "Standard_F2"
+  admin_username      = "adminuser"
+  admin_password      = "P@ssw0rd1234!"
+  custom_data         = base64encode("Hello World!")
   network_interface_ids = [
     azurerm_network_interface.main.id,
   ]
